@@ -1,0 +1,19 @@
+It's pretty self-explained. Use a different configuration file for each network. (see technoirc.php for an example)
+Make sure you setup owner host in the config to your host.
+Start with `php <config file>`
+When the bot connects, assign it to its first channel with /msg <bot nick> .assign <channel>
+From there, you can get to know the bot by using the ".help" command.
+
+I take no responsibility in anything related to this bot. I only made it because I felt like it.
+Yes, I know it's poorly coded and has a terrible structure. My coding style has changed drastically since I finished 
+this bot.
+The point is that it works. :)
+I would prefer you didn't take credit for my work, but I have no say in that.
+
+I am no longer interested in PHP. I've been working with perl and my pircd fork, juno. 
+http://github.com/cooper879/juno-ircd; but I'm even more busy now with TS6-compatable perl IRC services and
+Chakora - http://github.com/iElijah101/Chakora
+I have also written PHP services for the InspIRCd linking protocol at http://github.com/cooper879/inspircd-php-services, 
+although I no longer work with InspIRCd. I find it not worth the bugs and bloats.
+
+You may contact me on TechnoIRC in #cooper (irc.technoirc.net)
