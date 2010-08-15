@@ -29,6 +29,7 @@ $db->datadir = "db/";
 		{
 			global $db;
 			global $config;
+			$this->ownerhost = $config->ownerhost;
 			while (true)
 			{
 				$this->date = date("n j Y g i s a");
@@ -71,7 +72,7 @@ $db->datadir = "db/";
 					$this->args[$data] = trim($rawdata[6]);
 	if (!$this->ignore[$this->h[$this->nick[$data]]]) {
 					if (strtolower($this->ex[3]) == ":.ignore") {
-						if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+						if ($this->ownerhost[strtolower($this->host[$data])]) {
 							if ($this->ex[4]) {
 								if ($this->h[$this->ex[4]]) {
 									$this->ignore[$this->h[$this->ex[4]]] = true;
@@ -81,7 +82,7 @@ $db->datadir = "db/";
 						} else { $this->notice($this->nick[$data], "You are not a fox admin."); }					
 					}	
 					elseif (strtolower($this->ex[3]) == ":.unignore") {
-						if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+						if ($this->ownerhost[strtolower($this->host[$data])]) {
 							if ($this->ex[4]) {
 								if ($this->h[$this->ex[4]]) {
 									unset($this->ignore[$this->h[$this->ex[4]]]);
@@ -91,7 +92,7 @@ $db->datadir = "db/";
 						} else { $this->notice($this->nick[$data], "You are not a fox admin."); }					
 					}	
 					elseif (strtolower($this->ex[3]) == ":.assign") {
-						if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+						if ($this->ownerhost[strtolower($this->host[$data])]) {
 							if ($this->ex[4]) {
 								$this->assign(trim($this->ex[4]), $this->channel[$data], $this->nick[$data]);
 							} else { $this->notice($this->nick[$data], "Incorrect syntax. ".$this->b.".assign <channel>"); }	
@@ -99,7 +100,7 @@ $db->datadir = "db/";
 						else { $this->notice($this->nick[$data], "You are not a fox admin."); }	
 					}
 					elseif (strtolower($this->ex[3]) == ":.unassign") {
-						if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+						if ($this->ownerhost[strtolower($this->host[$data])]) {
 							if ($this->ex[4]) {
 								$this->unassign(trim($this->ex[4]), $this->channel[$data], $this->nick[$data]);
 							} else { $this->notice($this->nick[$data], "Incorrect syntax. ".$this->b.".unassign <channel>"); }	
@@ -107,7 +108,7 @@ $db->datadir = "db/";
 						else { $this->notice($this->nick[$data], "You are not a fox admin."); }	
 					}
 					elseif (strtolower($this->ex[3]) == ":.clear") {
-						if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+						if ($this->ownerhost[strtolower($this->host[$data])]) {
 							if (strtolower($this->ex[4]) == "quotes") {
 								mysql_query("delete from quotes");
 								$this->privmsg($this->channel[$data], "[\2Clear\2] All quotes have been deleted.");
@@ -131,7 +132,7 @@ $db->datadir = "db/";
 						} else { $this->notice($this->nick[$data], "You are not a fox admin."); }					
 					}
 					elseif (strtolower($this->ex[3]) == ":.eval") {
-						if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+						if ($this->ownerhost[strtolower($this->host[$data])]) {
 							$eval = substr($this->args[$data], 6);
 							$this->notice($this->nick[$data], $this->b."[Eval] ".$this->o.$eval);
 							eval($eval);
@@ -377,7 +378,7 @@ $db->datadir = "db/";
 						unset($this->usg); unset($this->rusg);
 					}
 					elseif (strtolower($this->ex[3]) == ":.restart") {
-						if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+						if ($this->ownerhost[strtolower($this->host[$data])]) {
 							$file = __FILE__;
 							$pid = getmypid();
 							$this->privmsg($this->channel[$data],$this->nick[$data].': k');
@@ -409,7 +410,7 @@ $db->datadir = "db/";
 						}
 						elseif (strtolower($this->ex[4]) == "del") {
 							if (isset($this->ex[5])) {
-								if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+								if ($this->ownerhost[strtolower($this->host[$data])]) {
 								$db->deleteWhere('quotes.db',new AndWhereClause(new SimpleWhereClause(1, '=', $this->ex[5],'strcasecmp'))); $this->privmsg($this->channel[$data],"[\2Delete\2] Deleted matches (if any)");		
 								} else { $this->privmsg($this->channel[$data], "You are not a fox admin."); }
 							} else { $this->privmsg($this->channel[$data], "Incorrect syntax. ".$this->b.".q del <quote id>"); }
@@ -464,7 +465,7 @@ $db->datadir = "db/";
 						}
 						elseif (strtolower($this->ex[4]) == "del") {
 							if (isset($this->ex[5])) {
-								if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+								if ($this->ownerhost[strtolower($this->host[$data])]) {
 									$db->deleteWhere('pics.db',new AndWhereClause(new SimpleWhereClause(1, '=', $this->ex[5],'strcasecmp'))); $this->privmsg($this->channel[$data],"[\2Delete\2] Deleted matches (if any)");					
 								} else { $this->privmsg($this->channel[$data], "You are not a fox admin."); }
 							} else { $this->privmsg($this->channel[$data], "Incorrect syntax. ".$this->b.".q del <quote id>"); }
@@ -483,27 +484,27 @@ $db->datadir = "db/";
 					}
 					elseif (strtolower($this->ex[3]) == ":".strtolower($config->serv_nick).":") {
 						if (strtolower($this->ex[4]) == "eval") {
-							if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+							if ($this->ownerhost[strtolower($this->host[$data])]) {
 								$eval = substr($this->args[$data],strlen($this->ex[3])+5);
 								$this->privmsg($this->channel[$data],"[\2Eval\2] ".$eval);
 								eval($eval);
 							}
 						}
 						elseif (strtolower($this->ex[4]) == "print_r") {
-							if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+							if ($this->ownerhost[strtolower($this->host[$data])]) {
 								$this->privmsg($this->channel[$data],"[\2print_r\2] ".$this->ex[5]);
 								$var = $this->ex[5];
 								eval("print_r($var);");
 							}
 						}
 						elseif (strtolower($this->ex[4]) == "say") {
-							if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+							if ($this->ownerhost[strtolower($this->host[$data])]) {
 								$say = substr($this->args[$data],strlen($this->ex[3])+4);
 								$this->privmsg($this->channel[$data],$say);
 							}
 						}
 						elseif (strtolower($this->ex[4]) == "tell") {
-							if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+								if ($this->ownerhost[strtolower($this->host[$data])]) {
 								$say = substr($this->args[$data],strlen($this->ex[3])+6+strlen($this->ex[5]));
 								$this->privmsg($this->channel[$data],$this->ex[5].": ".$say);
 							}
