@@ -57,10 +57,9 @@ $db->datadir = "db/";
 				}
 				// PRIVMSG ~~~~~~~~~~~~
 				if ($this->ex[0] == 'ERROR') {
-					# if we don't die on disconnect, our CPU usage will rage.
-					die();
+					sleep(5); $this->connect();
 				}
-				if ($this->ex[1] == 'PRIVMSG') {
+					if ($this->ex[1] == 'PRIVMSG') {
 
 					preg_match("/^:(.*?)!(.*?)@(.*?)[\s](.*?)[\s](.*?)[\s]:(.*?)$/", $data, $rawdata);
 					$this->nick[$data] = $rawdata[1];
@@ -139,10 +138,10 @@ $db->datadir = "db/";
 						}
 					}
 					elseif (strtolower($this->ex[3]) == ":.help") {
-						$this->privmsg($this->channel[$data], ".add <command> <response>".$this->b." | ".$this->o.".del <command>".$this->b." | ".$this->o.".info <command>".$this->b." | ".$this->o.".amnt".$this->b." | ".$this->o.".addme <command> <response>".$this->b." | ".$this->o.".addact <command> <response>".$this->b." | ".$this->o.".infoact <command>".$this->b." | ".$this->o.".addactme <command> <response>".$this->b." | ".$this->o.".delact <command>".$this->b." | ".$this->o.".q add|del|<id>"); $this->privmsg($this->channel[$data], ".pic add|del|<id>".$this->b." | ".$this->o.".eval <eval>".$this->b." | ".$this->o.".ignore <nick>".$this->b." | ".$this->o.".unignore <nick>".$this->b." | ".$this->o.".clear pics|quotes".$this->b." | ".$this->o.".assign <channel>".$this->b." | ".$this->o.".unassign <channel>".$this->b." | ".$this->o.".addwild <command> <response>".$this->b." | ".$this->o.".addwildme <command> <response>"); $this->privmsg($this->channel[$data], "fox-ff (fox flatfile) version 1 - .delact, .addact, .infoact are incomplete (the former method fails)");
+						$this->privmsg($this->channel[$data], ".add <command> <response>".$this->b." | ".$this->o.".del <command>".$this->b." | ".$this->o.".info <command>".$this->b." | ".$this->o.".amnt".$this->b." | ".$this->o.".addme <command> <response>".$this->b." | ".$this->o.".addact <command> <response>".$this->b." | ".$this->o.".infoact <command>".$this->b." | ".$this->o.".addactme <command> <response>".$this->b." | ".$this->o.".delact <command>".$this->b." | ".$this->o.".q search|add|del|<id>"); $this->privmsg($this->channel[$data], ".pic add|del|<id>".$this->b." | ".$this->o.".eval <eval>".$this->b." | ".$this->o.".ignore <nick>".$this->b." | ".$this->o.".unignore <nick>".$this->b." | ".$this->o.".clear pics|quotes".$this->b." | ".$this->o.".assign <channel>".$this->b." | ".$this->o.".unassign <channel>".$this->b." | ".$this->o.".addwild <command> <response>".$this->b." | ".$this->o.".addwildme <command> <response> ".$this->b."|".$this->o." .restart"); $this->privmsg($this->channel[$data], "fox-ff (fox flatfile) version 1 - .delact, .addact, .infoact are incomplete (the former method fails)");
 					}
 					elseif (strtolower($this->ex[3]) == ":.invite") {
-						if ($this->ex[4]) {
+						if (isset($this->ex[4])) {
 							$this->send_data("INVITE ".$this->ex[4]." ".$this->channel[$data]);
 						} else { $this->privmsg($this->channel[$data], "Incorrect syntax. ".$this->b.".invite <nick>."); }
 					}
@@ -169,7 +168,7 @@ $db->datadir = "db/";
 
 							if ($check) {
 							if (!$check2) {
-								if ($this->ex[4] && $this->ex[5]) {
+								if (isset($this->ex[4]) && isset($this->ex[5])) {
 									$this->response[$data] = substr($this->args[$data], 6+strlen($this->ex[4]));
 									$this->privmsg($this->channel[$data], "If someone says \"".$this->b.$this->command[$data].$this->o."\", I will now respond with \"".$this->b.$this->response[$data].$this->o."\" in ".$this->b.$this->channel[$data].$this->o.".");
 
@@ -210,7 +209,7 @@ $db->datadir = "db/";
 
 							if ($check) {
 							if (!$check2) {
-								if ($this->ex[4] && $this->ex[5]) {
+								if (isset($this->ex[4]) && isset($this->ex[5])) {
 									$this->response[$data] = substr($this->args[$data], 10+strlen($this->ex[4]));
 									$this->privmsg($this->channel[$data], "If someone says \"".$this->b.$this->command[$data].$this->o."\", I will now respond with \"".$this->b.$this->response[$data].$this->o."\" in ".$this->b.$this->channel[$data].$this->o.".");
 						$db->insertWithAutoId('commands.db',0, array(
@@ -250,7 +249,7 @@ $db->datadir = "db/";
 
 							if ($check) {
 							if (!$check2) {
-								if ($this->ex[4] && $this->ex[5]) {
+								if (isset($this->ex[4]) && isset($this->ex[5])) {
 									$this->response[$data] = substr($this->args[$data], 12+strlen($this->ex[4]));
 									$this->privmsg($this->channel[$data], "If someone says \"".$this->b.$this->command[$data].$this->o."\" anywhere in their message, I will now respond with the action \"".$this->b.$this->response[$data].$this->o."\" in ".$this->b.$this->channel[$data].$this->o.".");
 
@@ -291,7 +290,7 @@ $db->datadir = "db/";
 
 							if ($check) {
 							if (!$check2) {
-								if ($this->ex[4] && $this->ex[5]) {
+								if (isset($this->ex[4]) && isset($this->ex[5])) {
 
 									$this->response[$data] = substr($this->args[$data], 8+strlen($this->ex[4]));
 									$this->privmsg($this->channel[$data], "If someone says \"".$this->b.$this->command[$data].$this->o."\", I will now respond with the action \"".$this->b.$this->response[$data].$this->o."\" in ".$this->b.$this->channel[$data].$this->o.".");
@@ -329,7 +328,7 @@ $db->datadir = "db/";
 						$check2->add(new SimpleWhereClause(7,'=',$this->channel[$data],'strcasecmp'));
 						$check2->add(new SimpleWhereClause(1,'=',$this->command[$data],'strcasecmp'));
 						$check2 = $db->selectWhere('commands.db',$check2);
-						if ($this->ex[4]) {
+						if (isset($this->ex[4])) {
 							if ($check) {
 							if ($check2) {
 								$this->privmsg($this->channel[$data], $this->b.$this->command[$data].$this->o." was deleted from the ".$this->b.$this->channel[$data].$this->o." command list.");
@@ -359,7 +358,7 @@ $db->datadir = "db/";
 						$check2->add(new SimpleWhereClause(7,'=',$this->channel[$data],'strcasecmp'));
 						$check2->add(new SimpleWhereClause(1,'=',$this->command[$data],'strcasecmp'));
 						$check2 = $db->selectWhere('commands.db',$check2);
-						if ($this->ex[4]) {
+						if (isset($this->ex[4])) {
 							if ($check) { 
 								if ($check2) {
 									foreach ($check2 as $check2) {
@@ -377,9 +376,18 @@ $db->datadir = "db/";
 						$this->privmsg($this->channel[$data],"[\2Memory\2] ".$this->usg." of allocated ".$this->rusg." are being used.");
 						unset($this->usg); unset($this->rusg);
 					}
+					elseif (strtolower($this->ex[3]) == ":.restart") {
+						if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
+							$file = __FILE__;
+							$pid = getmypid();
+							$this->privmsg($this->channel[$data],$this->nick[$data].': k');
+							$this->send_data('QUIT :k');
+							shell_exec('sleep 1; screen -dm php '.$_SERVER['PHP_SELF']);
+						}
+					}
 					elseif (strtolower($this->ex[3]) == ":.q") {
 						if (strtolower($this->ex[4]) == "add") {
-							if ($this->ex[5]) {
+							if (isset($this->ex[5])) {
 								$this->quote[$data] = substr($this->args[$data], 7);
 								$quotes = $db->selectAll('quotes.db');
 									$quoteid = 0; foreach ($quotes as $quotes) {
@@ -400,7 +408,7 @@ $db->datadir = "db/";
 							} else { $this->privmsg($this->channel[$data], "Incorrect syntax. ".$this->b.".q add <quote>"); }
 						}
 						elseif (strtolower($this->ex[4]) == "del") {
-							if ($this->ex[5]) {
+							if (isset($this->ex[5])) {
 								if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
 								$db->deleteWhere('quotes.db',new AndWhereClause(new SimpleWhereClause(1, '=', $this->ex[5],'strcasecmp'))); $this->privmsg($this->channel[$data],"[\2Delete\2] Deleted matches (if any)");		
 								} else { $this->privmsg($this->channel[$data], "You are not a fox admin."); }
@@ -412,6 +420,13 @@ $db->datadir = "db/";
 						elseif (strtolower($this->ex[4]) == "amnt") {
 							$this->quote_amnt($this->channel[$data]);
 						}
+						elseif (strtolower($this->ex[4]) == "search") {
+							if (isset($this->ex[5])) {
+								$search = substr($data,strlen($this->ex[0])+strlen($this->ex[1])+strlen($this->ex[2])+strlen($this->ex[3])+strlen($this->ex[4])+4);
+								$search = trim($search);
+								$this->quote_search($this->channel[$data],$search);
+								} else { $this->privmsg($this->channel[$data],'Incorrect syntax. '."\2.q search <query>\2"); }
+						}
 						else {
 							if ($this->ex[4]) {
 								$this->quote_view($this->ex[4], $this->channel[$data]);
@@ -420,7 +435,7 @@ $db->datadir = "db/";
 					}
 					elseif (strtolower($this->ex[3]) == ":.pic") {
 						if (strtolower($this->ex[4]) == "add") {
-							if ($this->ex[5]) {
+							if (isset($this->ex[5])) {
 								$this->quote[$data] = substr($this->args[$data], 9);
 								$quotes = $db->selectAll('pics.db');
 									$quoteid = 0; foreach ($quotes as $quotes) {
@@ -440,8 +455,15 @@ $db->datadir = "db/";
 								);
 							} else { $this->privmsg($this->channel[$data], "Incorrect syntax. ".$this->b.".q add <quote>"); }
 						}
+						elseif (strtolower($this->ex[4]) == "search") {
+							if (isset($this->ex[5])) {
+								$search = substr($data,strlen($this->ex[0])+strlen($this->ex[1])+strlen($this->ex[2])+strlen($this->ex[3])+strlen($this->ex[4])+4);
+								$search = trim($search);
+								$this->pic_search($this->channel[$data],$search);
+							} else { $this->privmsg($this->channel[$data],'Incorrect syntax.'."\2.pic search <query>\2"); }
+						}
 						elseif (strtolower($this->ex[4]) == "del") {
-							if ($this->ex[5]) {
+							if (isset($this->ex[5])) {
 								if (strtolower($this->host[$data]) == strtolower($config->ownerhost)) {
 									$db->deleteWhere('pics.db',new AndWhereClause(new SimpleWhereClause(1, '=', $this->ex[5],'strcasecmp'))); $this->privmsg($this->channel[$data],"[\2Delete\2] Deleted matches (if any)");					
 								} else { $this->privmsg($this->channel[$data], "You are not a fox admin."); }
@@ -454,9 +476,9 @@ $db->datadir = "db/";
 							$this->pic_amnt($this->channel[$data]);
 						}
 						else {
-							if ($this->ex[4]) {
+							if (isset($this->ex[4])) {
 								$this->pic_view($this->ex[4], $this->channel[$data]);
-							} else { $this->privmsg($this->channel[$data], "Incorrect syntax. ".$this->b.".pic add|del|rand|amnt <quote>|<quote id>"); }
+							} else { $this->privmsg($this->channel[$data], "Incorrect syntax. ".$this->b.".pic search|add|del|rand|amnt <query>|<quote>|<quote id>"); }
 						}
 					}
 					elseif (strtolower($this->ex[3]) == ":".strtolower($config->serv_nick).":") {
@@ -518,8 +540,7 @@ $db->datadir = "db/";
 							foreach ($ex as $word) { 
 								$this->wild($word,$this->channel[$data], $this->nick[$data], $this->ident[$data], $this->host[$data]);
 							}
-						}
-					}
+		}			}
 				$this->clear();
 	}
 				} // end privmsg
@@ -555,7 +576,8 @@ $db->datadir = "db/";
 							$this->privmsg($channel,"\001ACTION ".$response."\001");
 							}
 						}
-					}
+					return true;
+					} else { return false; }
 		}
 
 		function assign ($channel, $rchannel, $nick) {
@@ -597,6 +619,36 @@ $db->datadir = "db/";
 					} else { $this->privmsg($rchannel, $this->b.$channel.$this->o." is not in my database."); }
 				} else { $this->privmsg($rchannel, $this->b.$channel.$this->o." is not a valid channel name."); }
 		}
+		function quote_search ($channel,$query) {
+			global $db;
+                        $quotes = $db->selectAll('quotes.db');
+			$this->privmsg($channel,"All quotes containing \"\2$query\2\":");
+			$i = 0;
+                        foreach ($quotes as $quote) {
+				if (stripos($quote[2],$query) !== false) {
+					$this->quote_view($quote[1],$channel);
+					usleep(500000);
+					$i++;
+				}
+                        }
+			$this->privmsg($channel,"End search \2$query\2. $i quotes were found.");
+
+		}
+                function pic_search ($channel,$query) {
+                        global $db;
+                        $quotes = $db->selectAll('pics.db');
+                        $this->privmsg($channel,"All pictures containing \"\2$query\2\":");
+                        $i = 0;
+                        foreach ($quotes as $quote) {
+                                if (stripos($quote[2],$query) !== false) {
+                                        $this->pic_view($quote[1],$channel);
+                                        usleep(500000);
+                                        $i++;
+                                }
+                        }
+                        $this->privmsg($channel,"End search \2$query\2. $i pictures were found.");
+
+                }
 
 		function quote_view ($quote, $channel) {
 			global $db;
