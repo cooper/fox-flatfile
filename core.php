@@ -631,7 +631,7 @@ $db->datadir = "db/";
 					$i++;
 				}
                         }
-			$this->privmsg($channel,"End search \2$query\2. $i quotes were found.");
+			$this->privmsg($channel,"End search \"\2$query\2\". $i quotes were found.");
 
 		}
                 function pic_search ($channel,$query) {
@@ -646,10 +646,9 @@ $db->datadir = "db/";
                                         $i++;
                                 }
                         }
-                        $this->privmsg($channel,"End search \2$query\2. $i pictures were found.");
+                        $this->privmsg($channel,"End search \"\2$query\2\". $i pictures were found.");
 
                 }
-
 		function quote_view ($quote, $channel) {
 			global $db;
 			$totalquotes = 0;
