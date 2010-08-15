@@ -58,7 +58,9 @@ $db->datadir = "db/";
 				}
 				// PRIVMSG ~~~~~~~~~~~~
 				if ($this->ex[0] == 'ERROR') {
-					sleep(5); $this->connect();
+					if (!$this->restart) {
+						sleep(5); $this->connect();
+					}
 				}
 					if ($this->ex[1] == 'PRIVMSG') {
 
@@ -381,6 +383,7 @@ $db->datadir = "db/";
 						if ($this->ownerhost[strtolower($this->host[$data])]) {
 							$file = __FILE__;
 							$pid = getmypid();
+							$this->restart = true;
 							$this->privmsg($this->channel[$data],$this->nick[$data].': k');
 							$this->send_data('QUIT :k');
 							shell_exec('sleep 1; screen -dm php '.$_SERVER['PHP_SELF']);
